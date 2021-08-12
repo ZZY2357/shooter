@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/Enemy.png" type="Texture" id=1]
+[ext_resource path="res://assets/Gun1.png" type="Texture" id=2]
+[ext_resource path="res://src/Actors/Enemy.gd" type="Script" id=3]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 22.7249
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 216.567
+
+[node name="Enemy" type="KinematicBody2D"]
+collision_layer = 2
+collision_mask = 7
+script = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Bullet_Deteter" type="Area2D" parent="."]
+collision_mask = 8
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Bullet_Deteter"]
+modulate = Color( 1, 0, 0, 1 )
+shape = SubResource( 1 )
+
+[node name="Gun" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="Gun"]
+position = Vector2( 18, 6 )
+texture = ExtResource( 2 )
+
+[node name="Player_Deteter" type="Area2D" parent="."]
+monitorable = false
+collision_layer = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player_Deteter"]
+shape = SubResource( 2 )
+
+[node name="Shooting_Timer" type="Timer" parent="."]
+wait_time = 0.2
+
+[connection signal="area_entered" from="Bullet_Deteter" to="." method="_on_Bullet_Deteter_area_entered"]
+[connection signal="body_entered" from="Player_Deteter" to="." method="_on_Player_Deteter_body_entered"]
+[connection signal="body_exited" from="Player_Deteter" to="." method="_on_Player_Deteter_body_exited"]
+[connection signal="timeout" from="Shooting_Timer" to="." method="_on_Shooting_Timer_timeout"]
